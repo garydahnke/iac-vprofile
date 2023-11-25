@@ -1,4 +1,7 @@
 module "eks" {
+  # Importing a "eks" module has pre-define attributes
+  # Below are additional or overridden attributes 
+  # Documentation: https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest
   source  = "terraform-aws-modules/eks/aws"
   version = "19.19.1"
 

@@ -26,6 +26,10 @@ terraform {
     }
   }
 
+  # When you run terraform, and terraform is applied, it will create the terraform.st file locally
+  # on the system where the terraform is applied if this S3 backend is not set up. Other, the terraform.st
+  # would be stored in the S3 bucket if this S3 backend is set up. Need to centralize the the terraform.st
+  # file so multiple individuals can access it to keep everyone in sync.
   backend "s3" {
     bucket = "gd-devop-gitops-vprofile-actions"
     key    = "terraform.tfstate"
