@@ -74,7 +74,7 @@ jobs:
       - name: Terraform apply
         id: apple
         # Execute apply if the branch is 'main' and there is a 'push' event of code changes
-        if: github.ref == 'refs/heads/main' && github.event_name == "push"
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         # Apply the data in planfile created in step Terraform plan
         run: terraform apply -auto-approve -input=false -parallellism=1 planfile
 
