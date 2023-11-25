@@ -1,0 +1,75 @@
+# Workflow file
+name: "Vprofile IAC"
+on:                     # Events when to run the workflow like a push to repository 
+  push:
+    branches:           # Branches in IAC-Vprofile repsoitory
+      - main
+      - stage
+    paths:
+      - terraform/**    # A 'push' to any file in the terraform folder
+  pull_request:
+    branches:
+      - main            # Only creator of main branch can commit; other make a pull request
+    paths:
+      - terraforms/**
+
+env:
+  # Credentials for deployment to AWS (Variable name must match secret variable name)
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }} 
+  # S3 Bucket for the Terraform state (Variable name not required to match secret variable name)
+  BUCKET_TF_STATE: ${{ secrets.BUCKET_TF_STATE }}
+  AWS_REGION: us-east-1
+  EKS_CLUSTER: vprofile-eks
+
+jobs:
+  terraform:
+    name: "Apply terraform code changes"
+    runs-on: ubuntu-latest
+    defaults:
+      run: 
+        shell: bash
+        working-directory: ./terraform 
+    # Steps (i.e. commands) of job to be executed in working directory above
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4     # Actions for Github
+      
+      - name: Setup Terraform with specified version on the runner
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform init
+        # Reference to this step in the next steps
+        id: init
+        # Stores information in this S3 Bucket
+        # Variable declared in env section
+        run: terraform init -backend-config="bucket=BUCKET_TF_STATE"  
+
+        # Validate the format of the Terraform Workflow file(s)
+        # Return 0 if format is valid
+      - name: Terraform format
+        id: format
+        run: terraform fmt -check
+
+        # Validate the syntax of the Terraform Workflow file(s)
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate
+
+        # Generate a plan (apply file/dry run) of the Terraform Workflow file(s)
+        # without executing the the Terraform Workflow file(s)
+      - name: Terraform plan
+        id: plan
+        # Issue with Github - Use planfile to store the output to use later
+        run: terraform plan -no-color -input=false -out planfile
+        # Allow a job to pass if this step fails. Handled in next step.
+        continue-on-error: true
+
+        # Exit job if 'plan' step fails
+      - name: Terraform plan status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
+
+   
+          
+
