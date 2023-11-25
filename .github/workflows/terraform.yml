@@ -43,7 +43,7 @@ jobs:
         id: init
         # Stores information in this S3 Bucket
         # Variable declared in env section
-        run: terraform init -backend-config="bucket=BUCKET_TF_STATE"  
+        run: terraform init -backend-config="bucket=$BUCKET_TF_STATE"  
 
         # Validate the format of the Terraform Workflow file(s)
         # Return 0 if format is valid
