@@ -15,6 +15,7 @@ module "eks" {
   }
 
   eks_managed_node_groups = {
+    # Auto-scaling for node group one
     one = {
       name = "node-group-1"
 
@@ -24,7 +25,7 @@ module "eks" {
       max_size     = 3
       desired_size = 2
     }
-
+    # Auto-scaling for node group two
     two = {
       name = "node-group-2"
 
