@@ -1,4 +1,7 @@
 module "eks" {
+  # Importing a "eks" module has pre-define attributes
+  # Below are additional or overridden attributes 
+  # Documentation: https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest
   source  = "terraform-aws-modules/eks/aws"
   version = "19.19.1"
 
@@ -15,6 +18,7 @@ module "eks" {
   }
 
   eks_managed_node_groups = {
+    # Auto-scaling for node group one
     one = {
       name = "node-group-1"
 
@@ -24,7 +28,7 @@ module "eks" {
       max_size     = 3
       desired_size = 2
     }
-
+    # Auto-scaling for node group two
     two = {
       name = "node-group-2"
 

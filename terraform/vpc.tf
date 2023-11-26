@@ -1,4 +1,7 @@
 module "vpc" {
+  # Importing a "vpc" module has pre-define attributes
+  # Below are additional or overridden attributes 
+  # Documentation: https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest
   source  = "terraform-aws-modules/vpc/aws"
   version = "5.1.2"
 
