@@ -76,7 +76,7 @@ jobs:
         # Execute apply if the branch is 'main' and there is a 'push' event of code changes
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         # Apply the data in planfile created in step Terraform plan
-        run: terraform apply -auto-approve -input=false -parallellism=1 planfile
+        run: terraform apply -auto-approve -input=false -parallelism=1 planfile
 
         # Set AWS credentials of IAM User 'gitops' to allow AWS CLI execution in
         # the step 'Get Kube config file' to install a Kube confirguration file
@@ -85,7 +85,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }} 
-          aws-region: ${{ env.AWS_REGION}}
+          aws-region: ${{ env.AWS_REGION }}
 
         # Use AWS Credentials to execute a AWS CLI command to install a Kube confirguration file
       - name: Get Kube config file
